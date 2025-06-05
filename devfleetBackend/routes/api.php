@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\TaskController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +16,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:sanctum')->group(function () {
+    // Proyectos
+    Route::get('projects', [ProjectController::class, 'getProjectsByUser']);
+
+
+    // Tareas (anidadas en proyectos)
+    Route::get('projects/{project}/tasks', [TaskController::class, 'getTasks']);
+    Route::post('projects/{project}/tasks', [TaskController::class, 'createTask']);
+    Route::put('projects/{project}/tasks/{task}', [TaskController::class, 'updateTask']);
+    Route::delete('projects/{project}/tasks/{task}', [TaskController::class, 'deleteTask']);
 });
